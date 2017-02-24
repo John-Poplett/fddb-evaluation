@@ -81,10 +81,10 @@ Results::Results(string s, double scoreThresh, vector<MatchPair *> *mp, RegionsS
   if(mp)
     for(unsigned int i=0; i< mp->size(); i++){
       double score = mp->at(i)->score;
-      TPCont += score; 
-      if( score>0.5 ) 
+      TPCont += score;
+      if( score>0.5 )
       {
-	TPDisc++; 
+	TPDisc++;
 	FP--;
       }
     }
@@ -199,6 +199,31 @@ void Results::saveROC(string outFile, vector<Results *> *rv){
     }
   }
   osc.close();
+  osd.close();
+}
+
+void Results::savePRC(string outFile, vector<Results *> *rv){
+
+  string s = outFile + "PRC.txt";
+  ofstream osd(s.c_str());
+
+  for(unsigned int i=0; i< rv->size(); i++)
+  {
+    Results *r = rv->at(i);
+    if(r->N)
+    {
+      const double truePositives = r->TPDisc;
+      const double falsePositives = r->FP;
+      const double conditionPositive = r->N;
+      const double precision = truePositives / (truePositives + falsePositives);
+      const double recall = truePositives / conditionPositive;
+      osd << precision << " " << recall << " " << r->scoreThreshold << endl;
+    }
+    else
+    {
+      osd << "0 0 " <<  r->scoreThreshold<< endl;
+    }
+  }
   osd.close();
 }
 

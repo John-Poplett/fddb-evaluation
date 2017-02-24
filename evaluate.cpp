@@ -39,7 +39,7 @@ vector<string> *getImageList(string inFile){
     string s;
     while(fin >> s){
       imNames->push_back(s);
-    } 
+    }
     fin.close();
     return imNames;
   }
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
   // directory containing the images
   string imDir = baseDir;
   // prefix used for writing the ROC-curve files
-  string rocFilePrefix = "temp"; 
+  string rocFilePrefix = "temp";
   // format used for specifying the detected regions
   int detFormat = DET_RECTANGLE;
   // format string to be appended to the image file names in the annotation set
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
   while( (c = getopt(argc, argv, "l:r:d:a:z:i:f:s")) != -1){
     switch(c){
       case 'l':
-	listFile = optarg;	
+	listFile = optarg;
 	break;
       case 'r':
 	rocFilePrefix = optarg;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]){
   vector<string> *imNames = getImageList(listFile);
   if(imNames == NULL)
   {
-    cerr << "No images found in the list " << listFile << endl;	
+    cerr << "No images found in the list " << listFile << endl;
     cerr << "Set list file using -l option. See usage ./evaluate -h." << endl;
     return -1;
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[]){
     {
       cerr << imName << " " << imS1 << " " << imS2 << endl;
       cerr << "Incompatible annotation and detection files. See output specifications" << endl;
-      return -1; 
+      return -1;
     }
 
     // Read the number of annotations/detections in this image
@@ -202,10 +202,10 @@ int main(int argc, char *argv[]){
     stringstream ss2(imS2);
     ss2 >> nDet;
 
-    string imFullName = imDir + imName + annotImageFormat; 
+    string imFullName = imDir + imName + annotImageFormat;
 
     // Read the annotations
-    RegionsSingleImage *annot; 
+    RegionsSingleImage *annot;
     annot = new EllipsesSingleImage(imFullName);
     ((EllipsesSingleImage *)annot)->read(fAnnot, nAnnot);
 
@@ -234,7 +234,7 @@ int main(int argc, char *argv[]){
 
     if(nDet == 0)
     {
-	// create the image results for zero detections 
+	// create the image results for zero detections
 	Results *r = new Results(imName, std::numeric_limits<double>::max(), NULL, annot, det);
 	imageResults->push_back(r);
     }
@@ -263,7 +263,7 @@ int main(int argc, char *argv[]){
 	  Region *rd = det->get(di);
 	  rd->setValid( rd->detScore >= scoreThreshold );
 	}
-	  
+
 	//  (b) match annotations to detections
 	vector<MatchPair *> *mps = M->getMatchPairs();
 
@@ -336,8 +336,10 @@ int main(int argc, char *argv[]){
   fAnnot.close();
   fDet.close();
 
-  // save the ROC-curve computed from the cumulative statistics 
+  // save the ROC-curve computed from the cumulative statistics
   dummyRes->saveROC(rocFilePrefix, cumRes);
+  // save the precision-recall curve computed from the cumulative statistics
+  dummyRes->savePRC(rocFilePrefix, cumRes);
 
   delete(imNames);
 

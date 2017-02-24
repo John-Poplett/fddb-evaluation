@@ -25,7 +25,7 @@ class Results{
 	double TPDisc;
 	/// False positives -- discrete
 	double FP;
-	/// Name of the image 
+	/// Name of the image
 	string imName;
 
     public:
@@ -39,13 +39,15 @@ class Results{
 	Results(Results *r1, Results *r2);
 	/// Constructor
 	Results(string imName, double threshold, vector<MatchPair *> *matchPairs, RegionsSingleImage *annot, RegionsSingleImage *det);
-	/// Return a vector of results with combined statistics from the two 
+	/// Return a vector of results with combined statistics from the two
 	/// vectors rv1 and rv2
 	vector<Results *> * merge(vector<Results *> *rv1, vector<Results *> *rv2);
 	/// print this result into the ostream os
 	void print(std::ostream &os);
 	/// save the ROC curve computed from rv into the file outFile
 	void saveROC(string outFile, vector<Results *> *rv);
+	/// save the Precision / Recall curve computed from rv into the file outFile
+	void savePRC(string outFile, vector<Results *> *rv);
 
 	/// get N
 	unsigned int getN();

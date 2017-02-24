@@ -15,13 +15,13 @@
 #include "Region.hpp"
 #include "OpenCVUtils.hpp"
 
-using std::cout; 
+using std::cout;
 using std::cerr;
 using std::endl;
 using std::vector;
 
 /**
- * Abstract class that specifies a set of regions for an image 
+ * Abstract class that specifies a set of regions for an image
  * */
 class RegionsSingleImage{
     protected:
@@ -35,13 +35,13 @@ class RegionsSingleImage{
 	/// Constructor: intialize the image for this set of ellipses as I
 	RegionsSingleImage(IplImage *I);
 	/// Destructor
-	~RegionsSingleImage();
+	virtual ~RegionsSingleImage();
 
-	/// Read the annotaion from the file fName -- Pure virtual 
+	/// Read the annotaion from the file fName -- Pure virtual
 	virtual void read(std::string)=0;
-	/// Read N annotaion from the file stream fs -- Pure virtual 
+	/// Read N annotaion from the file stream fs -- Pure virtual
 	virtual void read(std::ifstream &, int)=0;
-	/// Display all ellipses -- Pure virtual 
+	/// Display all ellipses -- Pure virtual
 	virtual void show() =0;
 
 	/// Returns the number of regions
